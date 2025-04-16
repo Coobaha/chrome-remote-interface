@@ -12,17 +12,17 @@ defmodule Mix.Tasks.FetchCdpProtocol do
   @protocol_sources %{
     "1-2" => %{
       url:
-        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/_data/1-2/protocol.json",
+        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/pages/_data/1-2.json",
       output: "priv/1-2/protocol.json"
     },
     "1-3" => %{
       url:
-        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/_data/1-3/protocol.json",
+        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/pages/_data/1-2.json",
       output: "priv/1-3/protocol.json"
     },
     "tot" => %{
       url:
-        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/_data/tot/protocol.json",
+        "https://raw.githubusercontent.com/ChromeDevTools/debugger-protocol-viewer/master/pages/_data/1-2.json",
       output: "priv/tot/protocol.json"
     }
   }
