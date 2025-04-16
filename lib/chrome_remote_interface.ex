@@ -34,7 +34,7 @@ defmodule ChromeRemoteInterface do
       @domain domain
       @moduledoc domain["description"]
 
-      def experimental?(), do: @domain["experimental"]
+      def experimental?(), do: unquote(domain["experimental"] || false)
 
       for command <- @domain["commands"] do
         name = command["name"]
