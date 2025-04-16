@@ -6,7 +6,7 @@ defmodule ChromeRemoteInterface.HTTP do
   @type success_http_response :: {:ok, Map.t()}
   @type error_http_response :: {:error, any()}
 
-  @spec call(ChromeRemoteInterface.Server.t(), String.t(), [method: :get | :put]) ::
+  @spec call(ChromeRemoteInterface.Server.t(), String.t(), method: :get | :put) ::
           success_http_response | error_http_response
   def call(server, path, opts \\ []) do
     method = Keyword.get(opts, :method, :get)

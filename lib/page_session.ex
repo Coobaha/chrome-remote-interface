@@ -286,7 +286,8 @@ defmodule ChromeRemoteInterface.PageSession do
   # handle the trapped exit call
   def handle_info({:EXIT, from, reason}, %{socket: socket} = state) do
     cleanup(reason, state)
-    {:stop, reason, state} # see GenServer docs for other return types
+    # see GenServer docs for other return types
+    {:stop, reason, state}
   end
 
   def terminate(reason, state) do

@@ -1,9 +1,18 @@
 defmodule ChromeRemoteInterface do
   @moduledoc """
   Documentation for ChromeRemoteInterface.
+
+  This is the main entry point for interacting with the Chrome DevTools Protocol.
+  It provides functions for connecting to Chrome, opening pages, and executing
+  commands against Chrome's various domains.
+
+  The module also handles generating code for Chrome DevTools Protocol commands
+  based on the protocol specification.
   """
 
-  alias ChromeRemoteInterface.PageSession
+  alias ChromeRemoteInterface.CodeGenerator
+
+  require ChromeRemoteInterface.CodeGenerator
 
   @protocol_env_key "CRI_PROTOCOL_VERSION"
   @protocol_versions ["1-2", "1-3", "tot"]
@@ -27,59 +36,8 @@ defmodule ChromeRemoteInterface do
     File.read!("priv/#{@protocol_version}/protocol.json")
     |> Jason.decode!()
 
-  # Generate ChromeRemoteInterface.RPC Modules
-
+  # Generate ChromeRemoteInterface.RPC Modules for each domain
   Enum.each(protocol["domains"], fn domain ->
-    defmodule Module.concat(ChromeRemoteInterface.RPC, domain["domain"]) do
-      @domain domain
-      @moduledoc domain["description"]
-
-      def experimental?(), do: unquote(domain["experimental"] || false)
-
-      for command <- @domain["commands"] do
-        name = command["name"]
-        description = command["description"]
-
-        arg_doc =
-          command["parameters"]
-          |> List.wrap()
-          |> Enum.map(fn param ->
-            "#{param["name"]} - <#{param["$ref"] || param["type"]}> - #{param["description"]}"
-          end)
-
-        @doc """
-        #{description}
-
-        Parameters:
-        #{arg_doc}
-        """
-        def unquote(:"#{name}")(page_pid) do
-          page_pid
-          |> PageSession.execute_command(
-            unquote("#{domain["domain"]}.#{name}"),
-            %{},
-            []
-          )
-        end
-
-        def unquote(:"#{name}")(page_pid, parameters) do
-          page_pid
-          |> PageSession.execute_command(
-            unquote("#{domain["domain"]}.#{name}"),
-            parameters,
-            []
-          )
-        end
-
-        def unquote(:"#{name}")(page_pid, parameters, opts) when is_list(opts) do
-          page_pid
-          |> PageSession.execute_command(
-            unquote("#{domain["domain"]}.#{name}"),
-            parameters,
-            opts
-          )
-        end
-      end
-    end
+    CodeGenerator.generate_domain_module(domain)
   end)
 end
