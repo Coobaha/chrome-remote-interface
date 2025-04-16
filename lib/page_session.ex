@@ -233,6 +233,13 @@ defmodule ChromeRemoteInterface.PageSession do
     {:noreply, state}
   end
 
+  # handle the trapped exit call
+  def handle_info({:EXIT, _from, reason}, %{socket: _socket} = state) do
+    cleanup(reason, state)
+    # see GenServer docs for other return types
+    {:stop, reason, state}
+  end
+
   defp add_callback(state, from) do
     state
     |> Map.update(:callbacks, [{state.ref_id, from}], fn callbacks ->
@@ -283,12 +290,7 @@ defmodule ChromeRemoteInterface.PageSession do
     |> Enum.each(&send(&1, event))
   end
 
-  # handle the trapped exit call
-  def handle_info({:EXIT, from, reason}, %{socket: socket} = state) do
-    cleanup(reason, state)
-    # see GenServer docs for other return types
-    {:stop, reason, state}
-  end
+
 
   def terminate(reason, state) do
     cleanup(reason, state)
