@@ -22,3 +22,4 @@ erl_crash.dump
 # jetbrains staff
 *.iml
 .idea
+*.plt

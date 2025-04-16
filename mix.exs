@@ -11,7 +11,8 @@ defmodule ChromeRemoteInterface.Mixfile do
       name: "Chrome Remote Interface",
       source_url: "https://github.com/andrewvy/chrome-remote-interface",
       description: description(),
-      package: package()
+      package: package(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -28,12 +29,25 @@ defmodule ChromeRemoteInterface.Mixfile do
       {:jason, "~> 1.1"},
       {:hackney, "~> 1.8 or ~> 1.7 or ~> 1.6"},
       {:websockex, "~> 0.4.0"},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.28", only: :dev},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
   defp description do
     "Chrome Debugging Protocol client for Elixir"
+  end
+
+  defp dialyzer do
+    [
+      plt_add_apps: [:mix, :ex_unit],
+      plt_add_files: [
+        "priv/**/*.ex",
+        "test/**/*.ex"
+      ],
+      ignore_warnings: ".dialyzer_ignore.exs",
+      list_unused_filters: true
+    ]
   end
 
   defp package do

@@ -7,7 +7,7 @@ defmodule ChromeRemoteInterface do
   commands against Chrome's various domains.
 
   The module also handles generating code for Chrome DevTools Protocol commands
-  based on the protocol specification.
+  based on the protocol specification. 
   """
 
   alias ChromeRemoteInterface.CodeGenerator

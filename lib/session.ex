@@ -31,7 +31,8 @@ defmodule ChromeRemoteInterface.Session do
 
   Calls `/json/list`.
   """
-  @spec list_pages(Server.t()) :: HTTP.success_http_response() | HTTP.error_http_response()
+  @spec list_pages(Server.t()) ::
+          HTTP.success_http_response_of(list(map())) | HTTP.error_http_response()
   def list_pages(server) do
     server
     |> HTTP.call("/json/list")

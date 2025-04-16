@@ -229,7 +229,7 @@ defmodule ChromeRemoteInterface.PageSession do
     }
 
     json = Jason.encode!(message)
-    WebSockex.send_frame(socket, {:text, json})
+    :ok = WebSockex.send_frame(socket, {:text, json})
     {:noreply, state}
   end
 
@@ -289,8 +289,6 @@ defmodule ChromeRemoteInterface.PageSession do
     pids_subscribed_to_event
     |> Enum.each(&send(&1, event))
   end
-
-
 
   def terminate(reason, state) do
     cleanup(reason, state)
